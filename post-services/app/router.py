@@ -42,6 +42,9 @@ async def deleteRoom(room_id: str, db: Session = Depends(get_db)):
     await _services.delete_room(id=room_id, db=db)
     return {"status_code": 200}
 
+@router.post('/rooms/{room_id}/add-message')
+async def addMessage(room_id: int, message: _schemas.MessageCreate, db: Session = Depends(get_db)):
+    return await _services.add_message_to_room(room_id=room_id, message=message, db=db)
 
 
 '''
