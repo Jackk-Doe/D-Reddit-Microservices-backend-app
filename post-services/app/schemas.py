@@ -23,7 +23,6 @@ class _MessageBase(BaseModel):
     body: str
 
 class MessageCreate(_MessageBase):
-    room_id: int
     user_id: int
 
     class Config:
@@ -31,6 +30,7 @@ class MessageCreate(_MessageBase):
 
 class Message(MessageCreate):
     id: int
+    room_id: int
     updated: datetime
     created: datetime
 

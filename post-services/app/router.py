@@ -25,9 +25,9 @@ Room Routes
 async def getRooms(db: Session = Depends(get_db)):
     return await _services.get_rooms(db=db)
 
-# @router.get('/rooms/{room_id}')
-# async def getOne(room_id: str):
-#     ...
+@router.get('/rooms/{room_id}')
+async def getRoomByID(room_id: str, db: Session = Depends(get_db)):
+    return await _services.get_room_by_id(id=room_id, db=db)
 
 @router.post('/rooms')
 async def createRoom(room: _schemas.RoomCreate, db: Session = Depends(get_db)):
@@ -37,9 +37,11 @@ async def createRoom(room: _schemas.RoomCreate, db: Session = Depends(get_db)):
 # async def updateRoom(room_id: str):
 #     ...
     
-# @router.delete('/rooms/{room_id}')
-# async def deleteRoom(room_id: str):
-#     ...
+@router.delete('/rooms/{room_id}')
+async def deleteRoom(room_id: str, db: Session = Depends(get_db)):
+    await _services.delete_room(id=room_id, db=db)
+    return {"status_code": 200}
+
 
 
 '''
@@ -49,9 +51,9 @@ Messages Routes
 async def getMessages(db: Session = Depends(get_db)):
     return await _services.get_messages(db=db)
 
-@router.post('/messages', response_model=_schemas.Message)
-async def createMessage(message: _schemas.MessageCreate, db: Session = Depends(get_db)):
-    return await _services.create_message(message=message, db=db)
+# @router.post('/messages', response_model=_schemas.Message)
+# async def createMessage(message: _schemas.MessageCreate, db: Session = Depends(get_db)):
+#     return await _services.create_message(message=message, db=db)
 
 @router.delete('/messages/{message_id}')
 async def deleteMessage(message_id: int, db: Session = Depends(get_db)):
