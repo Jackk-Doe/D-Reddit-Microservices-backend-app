@@ -14,6 +14,7 @@ Room Routes
 async def get_rooms(db: Session):
     return [_schemas.Room.from_orm(_rooms) for _rooms in db.query(_models.Room).all()]
 
+
 async def get_room_by_id(id: int, db: Session):
     _room = db.query(_models.Room).get(id)
     if not _room:
@@ -23,7 +24,7 @@ async def get_room_by_id(id: int, db: Session):
 
 async def create_room(room: _schemas.RoomCreate, db: Session):
 
-    async def check_topics_exist(topic: str):
+    async def check_topics_exist(topic: str) -> int:
         '''
         If existed return, else create new Topic
         '''
@@ -59,8 +60,10 @@ async def delete_room(id: int, db: Session):
 async def add_message_to_room(room_id: int, message: _schemas.MessageCreate, db: Session):
     _room = db.query(_models.Room).get(room_id)
     if not _room:
-        raise HTTPException(status_code=404, detail="The given room id not found")
-    _message = _models.Message(body=message.body, user_id=message.user_id, room_id=room_id)
+        raise HTTPException(
+            status_code=404, detail="The given room id not found")
+    _message = _models.Message(
+        body=message.body, user_id=message.user_id, room_id=room_id)
     db.add(_message)
     db.commit()
     db.refresh(_message)
