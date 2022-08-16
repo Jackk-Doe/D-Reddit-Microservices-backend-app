@@ -1,0 +1,21 @@
+# For Testing Database
+
+version: '3.8'
+
+services:
+  user-services-db:
+    container_name: 'mongo-database'
+    image: 'mongo'
+    environment:
+      # - MONGO_INITDB_ROOT_USERNAME=root
+      # - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_DATABASE=user-db   #Database's Name
+    ports:
+      - '27017:27017'
+    volumes:
+      - db:/var/lib/mongodb/data
+
+
+volumes:
+  db:
+    driver: local
