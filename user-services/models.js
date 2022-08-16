@@ -13,6 +13,9 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    role: {
+        type: String
+    },
     bio: {
         type: String,
         required: true

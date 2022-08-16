@@ -19,7 +19,7 @@ app.use(express.json());
 app.use('/users', router);
 
 
-await mongodbConnection(CONNECTION_URL);
+mongodbConnection(CONNECTION_URL);
 
 app.listen(PORT, () => {
     console.log(`Server running on PORT : ${PORT}`);
