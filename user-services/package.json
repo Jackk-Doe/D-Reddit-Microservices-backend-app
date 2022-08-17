@@ -4,7 +4,8 @@
   "description": "user-services to use with D-Reddit microservices app",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "author": "Jackk-Doe",
   "license": "ISC",

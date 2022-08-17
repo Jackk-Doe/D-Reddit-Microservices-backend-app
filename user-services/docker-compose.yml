@@ -3,19 +3,27 @@
 version: '3.8'
 
 services:
-  user-services-db:
-    container_name: 'mongo-database'
-    image: 'mongo'
-    environment:
-      # - MONGO_INITDB_ROOT_USERNAME=root
-      # - MONGO_INITDB_ROOT_PASSWORD=password
-      - MONGO_INITDB_DATABASE=user-db   #Database's Name
-    ports:
-      - '27017:27017'
-    volumes:
-      - db:/var/lib/mongodb/data
 
+# Reference : https://www.youtube.com/watch?v=vm3YfOHf_Cc
+  app:
+    container_name: user-services-app
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+    environment:
+      - CONNECTION_URL=mongodb://user-services-db:27017/ # either 'mongodb' or container name (user-services-db)
+      - PORT=5000
+
+  mongodb:
+    container_name: user-services-db
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb:/data/db
 
 volumes:
-  db:
-    driver: local
+  mongodb: {}
