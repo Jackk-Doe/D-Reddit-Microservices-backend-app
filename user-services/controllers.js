@@ -9,7 +9,7 @@ class UserController {
       const user = await UserModel.findById(req.params.id);
 
       if (!user) {
-        res.status(404).json({ detail: "User not found" });
+        return res.status(404).json({ detail: "User not found" });
       }
 
       const userRead = {
