@@ -5,11 +5,22 @@ const UserModel = require("./models");
 
 class UserController {
   static async getUser(req, res) {
-    UserModel.findById(req.params.id)
-      .then((user) => res.status(200).json(user))
-      .catch((error) => res.status(404).json({ error: "User not found" }));
+    try {
+        const user = await UserModel.findById(req.params.id);
+
+        if (!user) {
+            res.status(404).json({ detail: "User not found"});
+        }
+
+        const userRead = { name: user.name, id: user._id, email: user.email, role: user.role, bio: user.bio };
+
+        res.status(200).json({ user: userRead });
+    } catch (error) {
+        res.status(500).json({ detail: "Can't get User", error });
+    }
   }
 
+  /// POST [ /users/signup ]
   static async signUp(req, res) {
     const { name, email, password, role, bio } = req.body;
     try {
@@ -46,6 +57,7 @@ class UserController {
     }
   }
 
+  /// POST [ /users/signin ]
   static async signIn(req, res) {}
 }
 
