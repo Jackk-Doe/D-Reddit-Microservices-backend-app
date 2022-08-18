@@ -1,3 +1,10 @@
 .git
 .gitignore
+*.md
+
+
+.env
 node_modules/
+
+Dockerfile
+docker-compose.y*ml
