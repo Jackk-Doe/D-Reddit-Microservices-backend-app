@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+import os
+
 from database import engine
 import models
 from router import router
@@ -17,4 +19,9 @@ app.include_router(router, prefix="/posts", tags=["posts"])
 
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run("main:app", port=8000, reload=True)
+    from dotenv import load_dotenv
+
+    load_dotenv()
+    PORT = int(os.getenv('PORT'))
+
+    uvicorn.run("main:app", port=PORT, reload=True)

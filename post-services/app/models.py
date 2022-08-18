@@ -29,7 +29,7 @@ class Room(Base):
     updated = Column(DateTime, default=datetime.datetime.utcnow)
     created = Column(DateTime, default=datetime.datetime.utcnow)
 
-    topic_ids = Column(ARRAY(Integer, ForeignKey("topics.id")))
+    topics_id = Column(ARRAY(Integer, ForeignKey("topics.id")))
 
     # topics_id = Column(Integer, ForeignKey("topics.id"))
 
