@@ -8,5 +8,6 @@ COPY . .
 ENV PORT=5000
 # Either 'mongodb' or container name (user-services-db)
 ENV CONNECTION_URL=mongodb://mongodb:27017/ 
+ENV SECRET_KEY="THIS_IS_SUPPOSSED_TO_BE_A_SECRET_KEY_FOR_AUTH_FUNCTION"
 EXPOSE 5000
 CMD [ "node", "index.js" ]
