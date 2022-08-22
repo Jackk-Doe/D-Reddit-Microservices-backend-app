@@ -4,6 +4,16 @@ const jwt = require("jsonwebtoken");
 const UserModel = require("./models");
 
 class UserController {
+
+  static async getAll(req, res) {
+    try {
+      const users = await UserModel.find();
+      res.status(200).json({ users: users });
+    } catch (error) {
+      res.status(500).json({ detail: "Can't get users"})
+    }
+  }
+
   static async getUser(req, res) {
     try {
       const user = await UserModel.findById(req.params.id);
