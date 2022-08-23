@@ -23,8 +23,7 @@ class _MessageBase(BaseModel):
     body: str
 
 class MessageCreate(_MessageBase):
-    # TODO : Change hostID data type
-    user_id: int
+    user_id: str
 
     class Config:
         orm_mode = True
@@ -42,8 +41,7 @@ class Message(MessageCreate):
 # Room Schemas
 class _RoomBase(BaseModel):
     room_name: str
-    # TODO : Change hostID data type
-    host_id: int
+    host_id: str
     body: str
     
 
@@ -56,8 +54,7 @@ class RoomCreate(_RoomBase):
 class Room(_RoomBase):
     id: int
     topic_ids: list[int]
-    # TODO : Change hostID data type
-    participants_id: list[int]
+    participants_id: list[str]
     messages: list[Message]
     updated: datetime
     created: datetime

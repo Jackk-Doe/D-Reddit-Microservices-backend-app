@@ -23,11 +23,9 @@ class Room(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     room_name = Column(String)
-    # TODO : Change hostID data type
-    host_id = Column(Integer)
+    host_id = Column(String)
     body = Column(String)
-    # TODO : Change hostID data type
-    participants_id = Column(ARRAY(Integer), default=[])
+    participants_id = Column(ARRAY(String), default=[])
     updated = Column(DateTime, default=datetime.datetime.utcnow)
     created = Column(DateTime, default=datetime.datetime.utcnow)
 
@@ -44,8 +42,7 @@ class Message(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     room_id = Column(Integer, ForeignKey("rooms.id", ondelete="CASCADE"))
-    # TODO : Change hostID data type
-    user_id = Column(Integer)
+    user_id = Column(String)
     body = Column(String)
     updated = Column(DateTime, default=datetime.datetime.utcnow)
     created = Column(DateTime, default=datetime.datetime.utcnow)
