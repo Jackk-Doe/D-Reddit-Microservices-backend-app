@@ -53,7 +53,7 @@ class RoomCreate(_RoomBase):
 
 class Room(_RoomBase):
     id: int
-    topic_ids: list[int]
+    topics_id: list[int]
     participants_id: list[str]
     messages: list[Message]
     updated: datetime

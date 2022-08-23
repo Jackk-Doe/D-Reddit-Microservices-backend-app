@@ -26,7 +26,7 @@ async def create_room(room: _schemas.RoomCreate, db: Session):
 
     async def check_topics_exist(topic: str) -> int:
         '''
-        If existed return, else create new Topic
+        If existed return, else create new Topic in DB
         '''
         topic_search: _models.Topic = db.query(
             _models.Topic).filter_by(topic_name=topic).first()
@@ -39,9 +39,9 @@ async def create_room(room: _schemas.RoomCreate, db: Session):
             db.refresh(_topic)
             return _topic.id
 
-    _topic_ids = [await check_topics_exist(topic) for topic in room.topics]
+    _topics_id = [await check_topics_exist(topic) for topic in room.topics]
     _room = _models.Room(room_name=room.room_name,
-                         host_id=room.host_id, body=room.body, topic_ids=_topic_ids)
+                         host_id=room.host_id, body=room.body, topics_id=_topics_id)
     db.add(_room)
     db.commit()
     db.refresh(_room)
