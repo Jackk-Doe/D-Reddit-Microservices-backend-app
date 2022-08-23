@@ -1,10 +1,12 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
+import httpx
 
 from database import SessionLocal
 import schemas as _schemas
 import services as _services
+import load_envs as _env
 
 
 router = APIRouter()
@@ -31,7 +33,18 @@ async def getRoomByID(room_id: str, db: Session = Depends(get_db)):
 
 @router.post('/rooms')
 async def createRoom(room: _schemas.RoomCreate, db: Session = Depends(get_db)):
-    # TODO : Make call to UserServices
+    try:
+        response = httpx.get(f"{_env.USER_SERVICES_URL}/{room.host_id}")
+        user = response.text
+
+        print("User: ",user)
+        print("Statuscode: ",response.status_code != 200)
+        
+        if response.status_code != 200:
+            return {"status_code":401, "detail":"User not found"}
+    except:
+        return HTTPException(status_code=500, detail="Can not create room")
+
     return await _services.create_room(room=room, db=db)
 
 # @router.patch('/rooms/{room_id}')
