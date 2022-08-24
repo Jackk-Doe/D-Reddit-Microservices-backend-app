@@ -33,8 +33,7 @@ async def getRoomByID(room_id: str, db: Session = Depends(get_db)):
 @router.post('/rooms')
 async def createRoom(room: _schemas.RoomCreate, db: Session = Depends(get_db)):
     try:
-        # TODO : Think of what to do with a return User
-        user = await _api_users.validate_user(room.host_id)
+        await _api_users.validate_user(room.host_id)
     except Exception as error:
         return HTTPException(status_code=500, detail=str(error))
 
