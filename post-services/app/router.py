@@ -34,10 +34,10 @@ async def getRoomByID(room_id: str, db: Session = Depends(get_db)):
 async def createRoom(room: _schemas.RoomCreate, db: Session = Depends(get_db)):
     try:
         await _api_users.validate_user(room.host_id)
+        return await _services.create_room(room=room, db=db)
     except Exception as error:
         return HTTPException(status_code=500, detail=str(error))
 
-    return await _services.create_room(room=room, db=db)
 
 # @router.patch('/rooms/{room_id}')
 # async def updateRoom(room_id: str):
