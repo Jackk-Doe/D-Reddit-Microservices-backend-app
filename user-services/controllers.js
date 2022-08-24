@@ -16,6 +16,7 @@ class UserController {
 
   static async getUser(req, res) {
     try {
+      // If a given [id] field is not in 24 hex character, it throws error (mongoose)
       const user = await UserModel.findById(req.params.id);
 
       if (!user) {
@@ -32,7 +33,7 @@ class UserController {
 
       res.status(200).json({ user: userRead });
     } catch (error) {
-      res.status(500).json({ detail: "Can't get User" });
+      res.status(500).json({ detail: "Error, can not get User" });
     }
   }
 
