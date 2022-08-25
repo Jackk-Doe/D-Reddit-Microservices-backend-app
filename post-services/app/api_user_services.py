@@ -4,12 +4,12 @@ import httpx
 
 import load_envs as _envs
 
-# _oauth2schema = OAuth2PasswordBearer("/api/token")
+
 _oauth2schema = OAuth2PasswordBearer(tokenUrl="token")
 
 async def validate_token(token: str = Depends(_oauth2schema)):
     '''
-    Validate User account through a given [token] with User-services, then return [user_id]
+    Validate User account with a given [token] through User-services, then return [user_id]
     '''
     try:
         _headers = {'Authorization': 'Bearer ' + token}

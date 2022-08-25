@@ -79,7 +79,7 @@ async def getMessages(db: Session = Depends(get_db)):
 
 @router.delete('/messages/{message_id}')
 async def deleteMessage(message_id: int, db: Session = Depends(get_db)):
-    # TODO : Make call to UserServices
+    # TODO LATER : Make call to UserServices
     await _services.delete_message(message_id=message_id, db=db)
     return {"status_code": 200}
 
