@@ -41,7 +41,6 @@ class Message(MessageCreate):
 # Room Schemas
 class _RoomBase(BaseModel):
     room_name: str
-    host_id: str
     body: str
     
 
@@ -53,6 +52,7 @@ class RoomCreate(_RoomBase):
 
 class Room(_RoomBase):
     id: int
+    host_id: str
     topics_id: list[int]
     participants_id: list[str]
     messages: list[Message]
