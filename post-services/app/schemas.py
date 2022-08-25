@@ -1,5 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel
+from typing import Union
 
 
 # Topic Schemas
@@ -61,3 +62,6 @@ class Room(_RoomBase):
 
     class Config:
         orm_mode = True
+
+class RoomUpdate(RoomCreate):
+    pass

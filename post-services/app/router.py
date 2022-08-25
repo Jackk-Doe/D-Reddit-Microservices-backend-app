@@ -37,10 +37,14 @@ async def createRoom(room: _schemas.RoomCreate, db: Session = Depends(get_db), u
     except Exception as error:
         return HTTPException(status_code=500, detail=str(error))
 
-
-# @router.patch('/rooms/{room_id}')
-# async def updateRoom(room_id: str):
-#     ...
+@router.patch('/rooms/{room_id}')
+async def updateRoom(room_id: str, update_room: _schemas.RoomUpdate, db: Session = Depends(get_db), user_id = Depends(_api_users.validate_token)):
+    try:
+        return await _services.update_room(room_id=room_id, user_id=user_id, update_room=update_room, db=db)
+    except HTTPException as _http_error:
+        return HTTPException(status_code=_http_error.status_code, detail=_http_error.detail)
+    except Exception as error:
+        return HTTPException(status_code=500, detail=str(error))
     
 @router.delete('/rooms/{room_id}')
 async def deleteRoom(room_id: str, db: Session = Depends(get_db), user_id = Depends(_api_users.validate_token)):
