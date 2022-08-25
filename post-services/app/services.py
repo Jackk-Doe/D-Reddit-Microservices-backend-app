@@ -98,13 +98,13 @@ async def delete_room(id: int, user_id: str, db: Session):
     db.commit()
 
 
-async def add_message_to_room(room_id: int, message: _schemas.MessageCreate, db: Session):
+async def add_message_to_room(room_id: int, user_id: str, message: _schemas.MessageCreate, db: Session):
     _room = db.query(_models.Room).get(room_id)
     if not _room:
         raise HTTPException(
             status_code=404, detail="The given room id not found")
     _message = _models.Message(
-        body=message.body, user_id=message.user_id, room_id=room_id)
+        body=message.body, user_id=user_id, room_id=room_id)
     db.add(_message)
     db.commit()
     db.refresh(_message)

@@ -24,13 +24,12 @@ class _MessageBase(BaseModel):
     body: str
 
 class MessageCreate(_MessageBase):
-    user_id: str
-
     class Config:
         orm_mode = True
 
 class Message(MessageCreate):
     id: int
+    user_id: str
     room_id: int
     updated: datetime
     created: datetime

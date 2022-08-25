@@ -57,9 +57,13 @@ async def deleteRoom(room_id: str, db: Session = Depends(get_db), user_id = Depe
         return HTTPException(status_code=500, detail=str(error))
 
 @router.post('/rooms/{room_id}/add-message')
-async def addMessage(room_id: int, message: _schemas.MessageCreate, db: Session = Depends(get_db)):
-    # TODO : Make call to UserServices
-    return await _services.add_message_to_room(room_id=room_id, message=message, db=db)
+async def addMessage(room_id: int, message: _schemas.MessageCreate, db: Session = Depends(get_db), user_id = Depends(_api_users.validate_token)):
+    try:
+        return await _services.add_message_to_room(room_id=room_id, user_id=user_id, message=message, db=db)
+    except HTTPException as _http_error:
+        return HTTPException(status_code=_http_error.status_code, detail=_http_error.detail)
+    except Exception as error:
+        return HTTPException(status_code=500, detail=str(error))
 
 
 '''
