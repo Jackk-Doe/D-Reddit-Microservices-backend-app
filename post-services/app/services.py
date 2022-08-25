@@ -22,7 +22,7 @@ async def get_room_by_id(id: int, db: Session):
     return _schemas.Room.from_orm(_room)
 
 
-async def create_room(room: _schemas.RoomCreate, db: Session):
+async def create_room(room: _schemas.RoomCreate, user_id: str, db: Session):
 
     async def check_topics_exist(topic: str) -> int:
         '''
@@ -41,18 +41,24 @@ async def create_room(room: _schemas.RoomCreate, db: Session):
 
     _topics_id = [await check_topics_exist(topic) for topic in room.topics]
     _room = _models.Room(room_name=room.room_name,
-                         host_id=room.host_id, body=room.body, topics_id=_topics_id)
+                         host_id=user_id, body=room.body, topics_id=_topics_id)
     db.add(_room)
     db.commit()
     db.refresh(_room)
     return _schemas.Room.from_orm(_room)
 
 
-async def delete_room(id: int, db: Session):
+async def delete_room(id: int, user_id: str, db: Session):
     _room = db.query(_models.Room).get(id)
     if not _room:
+        #! Error : Room not found
         raise HTTPException(
             status_code=404, detail="The given room id not found")
+    if _room.host_id != user_id:
+        #! Error : This userID does not own this room
+        raise HTTPException(
+            status_code=403, detail="The user does not own this room")
+
     db.delete(_room)
     db.commit()
 

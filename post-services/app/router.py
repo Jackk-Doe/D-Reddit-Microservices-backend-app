@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
-import api_user_services as _api_users
 from database import SessionLocal
+import api_user_services as _api_users
 import schemas as _schemas
 import services as _services
 
@@ -31,10 +31,9 @@ async def getRoomByID(room_id: str, db: Session = Depends(get_db)):
     return await _services.get_room_by_id(id=room_id, db=db)
 
 @router.post('/rooms')
-async def createRoom(room: _schemas.RoomCreate, db: Session = Depends(get_db)):
+async def createRoom(room: _schemas.RoomCreate, db: Session = Depends(get_db), user_id = Depends(_api_users.validate_token)):
     try:
-        await _api_users.validate_user(room.host_id)
-        return await _services.create_room(room=room, db=db)
+        return await _services.create_room(room=room, user_id=user_id, db=db)
     except Exception as error:
         return HTTPException(status_code=500, detail=str(error))
 
@@ -44,10 +43,14 @@ async def createRoom(room: _schemas.RoomCreate, db: Session = Depends(get_db)):
 #     ...
     
 @router.delete('/rooms/{room_id}')
-async def deleteRoom(room_id: str, db: Session = Depends(get_db)):
-    # TODO : Make call to UserServices
-    await _services.delete_room(id=room_id, db=db)
-    return {"status_code": 200}
+async def deleteRoom(room_id: str, db: Session = Depends(get_db), user_id = Depends(_api_users.validate_token)):
+    try:
+        await _services.delete_room(id=room_id, user_id=user_id, db=db)
+        return {"status_code": 200}
+    except HTTPException as _http_error:
+        return HTTPException(status_code=_http_error.status_code, detail=_http_error.detail)
+    except Exception as error:
+        return HTTPException(status_code=500, detail=str(error))
 
 @router.post('/rooms/{room_id}/add-message')
 async def addMessage(room_id: int, message: _schemas.MessageCreate, db: Session = Depends(get_db)):
