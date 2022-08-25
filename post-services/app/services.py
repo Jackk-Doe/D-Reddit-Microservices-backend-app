@@ -22,24 +22,25 @@ async def get_room_by_id(id: int, db: Session):
     return _schemas.Room.from_orm(_room)
 
 
+async def _check_topics_exist(topic: str, db: Session) -> int:
+    '''
+    If existed return, else create new Topic in DB
+    '''
+    topic_search: _models.Topic = db.query(
+        _models.Topic).filter_by(topic_name=topic).first()
+    if topic_search:
+        return topic_search.id
+    else:
+        _topic = _models.Topic(topic_name=topic)
+        db.add(_topic)
+        db.commit()
+        db.refresh(_topic)
+        return _topic.id
+
+
 async def create_room(room: _schemas.RoomCreate, user_id: str, db: Session):
 
-    async def check_topics_exist(topic: str) -> int:
-        '''
-        If existed return, else create new Topic in DB
-        '''
-        topic_search: _models.Topic = db.query(
-            _models.Topic).filter_by(topic_name=topic).first()
-        if topic_search:
-            return topic_search.id
-        else:
-            _topic = _models.Topic(topic_name=topic)
-            db.add(_topic)
-            db.commit()
-            db.refresh(_topic)
-            return _topic.id
-
-    _topics_id = [await check_topics_exist(topic) for topic in room.topics]
+    _topics_id = [await _check_topics_exist(topic, db) for topic in room.topics]
     _room = _models.Room(room_name=room.room_name,
                          host_id=user_id, body=room.body, topics_id=_topics_id)
     db.add(_room)
