@@ -3,6 +3,18 @@
 version: '3.8'
 
 services:
+  app:
+    container_name: post-services-app
+    build: .
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
+
+    # For Development use only
+    volumes:
+      - .:/app
+
   postgres:
     container_name: post-services-db
     image: postgres:14.2-alpine

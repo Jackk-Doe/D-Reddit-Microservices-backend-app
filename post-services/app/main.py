@@ -22,4 +22,5 @@ if __name__ == '__main__':
 
     PORT = int(_envs.PORT)
 
-    uvicorn.run("main:app", port=PORT, reload=True)
+    # NOTE : Need to specify [host] param in uvicorn.run(), else Not getting any reply from server, when in Docker
+    uvicorn.run("main:app", host='0.0.0.0', port=PORT, reload=True)
