@@ -1,10 +1,9 @@
-# For Testing Database
+# For only Running Post-services and PostsDB (Postgres)
 
 version: '3.8'
 
 services:
 
-# Reference : https://www.youtube.com/watch?v=vm3YfOHf_Cc
   app:
     container_name: user-services-app
     build: .
