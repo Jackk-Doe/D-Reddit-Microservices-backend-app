@@ -42,7 +42,6 @@ async def getById(room_id: int):
         res = httpx.get(f"{_envs.POST_SERVICES_URL}/posts/rooms/{room_id}")
         _res = res.json()
         if res.status_code != 200:
-            #! Error
             return {'status_code': res.status_code, 'detail': _res['detail']}
         return _res
     except Exception as _error:
@@ -54,6 +53,19 @@ async def createRoom(payload: dict = Body(), token: str = Depends(oauth2_scheme)
     try:
         _headers = {'Authorization': 'Bearer ' + token}
         res = httpx.post(f"{_envs.POST_SERVICES_URL}/posts/rooms", json=payload, headers=_headers)
+        _res = res.json()
+        if res.status_code != 200:
+            return {'status_code': res.status_code, 'detail': _res['detail']}
+        return _res
+    except Exception as _error:
+        return HTTPException(status_code=500, detail=str(_error))
+
+
+@router.patch('/rooms/{room_id}')
+async def updateRoom(room_id: int, payload: dict = Body(), token: str = Depends(oauth2_scheme)):
+    try:
+        _headers = {'Authorization': 'Bearer ' + token}
+        res = httpx.patch(f"{_envs.POST_SERVICES_URL}/posts/rooms/{room_id}", json=payload, headers=_headers)
         _res = res.json()
         if res.status_code != 200:
             return {'status_code': res.status_code, 'detail': _res['detail']}
