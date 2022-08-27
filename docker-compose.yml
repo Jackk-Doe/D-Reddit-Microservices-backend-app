@@ -14,17 +14,17 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - db:/var/lib/postgresql/data
+      - post-db:/var/lib/postgresql/data
 
   # USER Database
   mongodb:
-    container_name: user-services-db
+    # container_name: user-services-db
     image: mongo
     restart: always
     ports:
       - "27017:27017"
     volumes:
-      - user-mongodb-data:/data/db
+      - mongodb-data:/data/db
 
 
   # Post-services
@@ -36,7 +36,9 @@ services:
     ports:
       - 8000:8000
     depends_on:
-      - postgres
+      # - postgres
+      postgres:
+        condition: service_started #Only started after postgres had started
     # For Development use only
     volumes:
       - ./post-services:/app
@@ -56,6 +58,6 @@ services:
       - ./user-services:/app
 
 volumes:
-  user-mongodb-data:
-  db:
+  mongodb-data:
+  post-db:
     driver: local

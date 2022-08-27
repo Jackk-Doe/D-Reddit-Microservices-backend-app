@@ -4,6 +4,19 @@ version: '3.8'
 
 services:
 
+  # app:
+  #   container_name: user-services-app
+  #   build: .
+  #   ports:
+  #     - "5000:5000"
+  #   depends_on:
+  #     - mongodb
+
+  #   # For Development use only
+  #   command: sh -c "npm install && npm run dev" #This overrided Dockerfile CMD
+  #   volumes:
+  #     - .:/app
+
   mongodb:
     container_name: user-services-db
     image: mongo
