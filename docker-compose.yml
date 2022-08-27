@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+
+  # POST Database
+  postgres:
+    container_name: post-services-db
+    image: postgres:14.2-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=room-db   #Database's Name
+    ports:
+      - '5432:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  # USER Database
+  mongodb:
+    container_name: user-services-db
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - user-mongodb-data:/data/db
+
+
+  # Post-services
+  # NOTE : must be run after the postgres run already
+  post-app:
+    container_name: post-services-app
+    build:
+      dockerfile: ./post-services/Dockerfile
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
+    # For Development use only
+    volumes:
+      - ./post-services:/app
+
+  # User-services
+  user-app:
+    container_name: user-services-app
+    build:
+      dockerfile: ./user-services/Dockerfile
+    ports:
+      - 5000:5000
+    depends_on:
+      - mongodb
+    # For Development use only
+    command: sh -c "npm install && npm run dev" #This overrided Dockerfile CMD
+    volumes:
+      - ./user-services:/app
+
+volumes:
+  user-mongodb-data:
+  db:
+    driver: local
