@@ -14,8 +14,8 @@ async def validate_token(token: str = Depends(_oauth2schema)):
     try:
         _headers = {'Authorization': 'Bearer ' + token}
         res = httpx.post(f"{_envs.USER_SERVICES_URL}/token", headers=_headers)
-    except:
-        raise HTTPException(status_code=400, detail="No response from User API")
+    except Exception as _error:
+        raise HTTPException(status_code=400, detail=f"Error : while sending to User-services >> {str(_error)}")
 
     # [res_datas] contains either : 'user_id' (SUCCESS) | 'detail' (FAIL)
     _res_datas = res.json()
