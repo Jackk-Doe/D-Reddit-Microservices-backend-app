@@ -72,3 +72,16 @@ async def updateRoom(room_id: int, payload: dict = Body(), token: str = Depends(
         return _res
     except Exception as _error:
         return HTTPException(status_code=500, detail=str(_error))
+
+
+@router.delete('/room/{room_id}')
+async def deleteRoom(room_id: int, token: str = Depends(oauth2_scheme)):
+    try:
+        _headers = {'Authorization': 'Bearer ' + token}
+        res = httpx.delete(f"{_envs.POST_SERVICES_URL}/posts/rooms/{room_id}", headers=_headers)
+        _res = res.json()
+        if res.status_code != 200:
+            return {'status_code': res.status_code, 'detail': _res['detail']}
+        return _res
+    except Exception as _error:
+        return HTTPException(status_code=500, detail=str(_error))
