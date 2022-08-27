@@ -18,6 +18,8 @@ app.use(cors());
 app.use(express.json());
 app.use('/users', router);
 
+// For testing api route
+app.get('/', async (req, res) => res.json({ message: 'Testing User API Route!' }));
 
 mongodbConnection(CONNECTION_URL);
 

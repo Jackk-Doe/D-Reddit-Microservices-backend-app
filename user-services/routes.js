@@ -4,7 +4,6 @@ const UserController = require('./controllers');
 
 const router = express.Router();
 
-router.get('/test', async (req, res) => res.json({ message: 'Testing API Route!' }));
 
 /// For ADMIN uses
 router.get('/', UserController.getAll);
