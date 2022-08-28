@@ -11,7 +11,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 @router.get('/')
 async def testRoute():
-    return {"TEST": "Hello from POST route"}
+    return {"TEST": "Hello from APIGateway : POST route"}
 
 
 @router.get('/test')

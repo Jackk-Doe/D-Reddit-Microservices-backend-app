@@ -5,7 +5,7 @@ import load_envs as _envs
 
 router = APIRouter()
 
-@router.get('')
+@router.get('/')
 async def testRoute():
     return {"TEST":"Hello from APIGateway : USER route"}
 
