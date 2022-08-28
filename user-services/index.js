@@ -19,7 +19,7 @@ app.use(express.json());
 app.use('/users', router);
 
 // For testing api route
-app.get('/', async (req, res) => res.json({ message: 'Testing User API Route!' }));
+app.get('/', async (req, res) => res.json({ message: 'Hello World From User-Services' }));
 
 mongodbConnection(CONNECTION_URL);
 

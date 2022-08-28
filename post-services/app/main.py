@@ -13,7 +13,7 @@ models.Base.metadata.create_all(bind=engine)
 
 @app.get('/')
 async def home():
-    return {'test': 'Hello World'}
+    return {'test': 'Hello World From Post-Services'}
 
 app.include_router(router, prefix="/posts", tags=["posts"])
 

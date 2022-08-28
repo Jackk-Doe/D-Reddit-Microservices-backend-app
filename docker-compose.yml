@@ -58,6 +58,19 @@ services:
     volumes:
       - ./user-services:/app
 
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./client-API-gateway
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - post-app
+      - user-app
+    volumes:
+      - ./client-API-gateway:/app
+
 volumes:
   mongodb-data:
   post-db:

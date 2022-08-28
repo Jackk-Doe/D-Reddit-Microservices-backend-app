@@ -1,4 +1,71 @@
-# D-Reddit-Microservices-backend-app
-Reddit-liked room column chatting microservices backend app, with FastAPI.
+# D-Reddit Microservices backend app, with Custom APIGateway and OAuth2 account system
+Blogging or story posting in rooms backend app in microservices architecture.
 
-Also use this project for INFS605 Microservices assignment work
+Similar to Reddit or Medium.
+
+Also use this project for INFS605 Microservices assignment
+
+## Tech stack : 
+* FastAPI 
+* NodeJS 
+* PostgreSQL 
+* MongoDB
+
+## Current avialable Apps and Services list
+- Client API Gateway
+  - Written in FastAPI. 
+  - Use this as a gateway to connect to all other services.
+  - Only the routes specify in this app that Client users are supposed to have requests to.
+- Post-services
+  - Written in FastAPI.
+  - Only this service would have access to POST database (PostgreSQL)
+  - This service handles  rooms (post or story) and messages (comment in rooms) READ, CREATE, UPDATE, DELETE
+- User-services
+  - Written in NodeJS.
+  - Uses OAuth2 security protocol, Bearer token verification.
+  - Only this service has access to USER database (MongoDB)
+  - Handling users account related requests : SignUp, SignIn, Generate-Token, Verify-Token.
+  
+## To Run App
+- NOTE : Suggest using Docker to create container and run the project.
+- NOTE : If running only single app or service. Run database first, if that service must be connect to a database.
+
+### 1. Run all
+Running **all the apps and services** via Docker-compose in root folder with these commands :
+```
+docker compose up
+```
+
+### 2. Run only one app or service
+Suggest using these 3 ways to run only one service.<br />
+Must go to app or service folder.
+
+1. `docker compose up`, if the app or service contains **docker-compose.yml** file.
+2. `python app/main.py`, if the app or service is FastAPI-based
+3. `node index.js` or `nodemon index.js`, if the service is User-services (NodeJS-based)
+
+- NOTE : Must run a database first if the service is **Post-services** or **User-services** or **Content-filter-services**
+- NOTE : If running services via `python xxx` or `node xxx` commands, .env file must be set up (example in .env.example or Dockerfile)
+
+## TODO list:
+TODO list, to complete this project (probably)
+- [ ] Finish Backend Microservices
+  - [X] APIGateway
+  - [ ] Admin APIGateway (Access to all routes)
+  - [X] Post-services
+  - [X] User-services
+  - [ ] Content-recommend-services
+  - [ ] Content-filter-services
+  - [ ] Admin-services (ADMIN USE)
+  - [X] POST database
+  - [X] USER database
+  - [ ] FILTER KEYS database
+  - [X] Dockerise app
+  - [ ] Use kubernetes to organise all containers
+  - [ ] Upload to some serverless cloud provider
+- [ ] Mobile Frontend app (Flutter)
+  - [ ] Access to Backend API
+  - [ ] Upload to PlayStore
+  - [ ] Upload to AppStore
+- [ ] Admin control app (Python Typer)
+  - [ ] Access to Backend API
