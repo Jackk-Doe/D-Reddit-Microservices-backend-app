@@ -2,9 +2,9 @@
 FROM node:16
 #From now on the './' dir is pointed to './app'
 WORKDIR /app
-COPY /user-services/package*.json .
+COPY ./package*.json .
 RUN npm install
-COPY /user-services .
+COPY . .
 
 ENV PORT=5000
 # Either 'mongodb' or container name (user-services-db)

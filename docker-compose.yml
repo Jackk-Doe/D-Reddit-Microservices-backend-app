@@ -18,7 +18,7 @@ services:
 
   # USER Database
   mongodb:
-    # container_name: user-services-db
+    container_name: user-services-db
     image: mongo
     restart: always
     ports:
@@ -32,11 +32,11 @@ services:
   post-app:
     container_name: post-services-app
     build:
-      dockerfile: ./post-services/Dockerfile
+      context: ./post-services
+      dockerfile: Dockerfile
     ports:
       - 8000:8000
     depends_on:
-      # - postgres
       postgres:
         condition: service_started #Only started after postgres had started
     # For Development use only
@@ -47,7 +47,8 @@ services:
   user-app:
     container_name: user-services-app
     build:
-      dockerfile: ./user-services/Dockerfile
+      context: ./user-services
+      dockerfile: Dockerfile
     ports:
       - 5000:5000
     depends_on:

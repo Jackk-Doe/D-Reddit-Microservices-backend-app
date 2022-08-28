@@ -1,9 +1,9 @@
 FROM python:3.9
 
 WORKDIR /app
-COPY /post-services/requirements.txt .
+COPY ./requirements.txt .
 RUN pip install -r requirements.txt
-COPY /post-services .
+COPY . .
 
 ENV DATABASE_URL "postgresql://root:password@postgres:5432/room-db"
 ENV PORT 8000
