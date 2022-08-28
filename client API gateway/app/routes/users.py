@@ -29,3 +29,15 @@ async def signupUser(payload: dict = Body()):
         return _res
     except Exception as _error:
         return HTTPException(status_code=500, detail=str(_error))
+
+
+@router.post('/signin')
+async def signinUser(payload: dict = Body()):
+    try:
+        res = httpx.post(f"{_envs.USER_SERVICES_URL}/users/signin", json=payload)
+        _res = res.json()
+        if res.status_code != 200:
+            return {'status_code': res.status_code, 'detail': _res['detail']}
+        return _res
+    except Exception as _error:
+        return HTTPException(status_code=500, detail=str(_error))
