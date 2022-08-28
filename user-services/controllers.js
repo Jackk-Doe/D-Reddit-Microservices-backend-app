@@ -93,6 +93,7 @@ class UserController {
         process.env.SECRET_KEY
       );
 
+      // TODO : in [user] must not include password and ID
       res.status(201).json({ user, token });
     } catch (error) {
       res.status(500).json({ detail: "Can't create account" });
@@ -123,6 +124,7 @@ class UserController {
         process.env.SECRET_KEY
       );
 
+      // TODO : in [user] must not include password and ID
       res.status(200).json({ user, token });
     } catch (error) {
       res.status(500).json({ detail: "Can't login an account", error });
