@@ -13,7 +13,7 @@ app.include_router(_user_router, prefix="/users")
 
 @app.get('/')
 async def home():
-    return {"API Testing": "Hello FastAPI"}
+    return {"API Testing": "Hello FastAPI From API Gateway"}
 
 if __name__ == '__main__':
     import uvicorn
