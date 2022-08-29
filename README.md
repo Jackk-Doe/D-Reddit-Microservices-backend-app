@@ -47,6 +47,10 @@ Must go to app or service folder.
 - NOTE : Must run a database first if the service is **Post-services** or **User-services** or **Content-filter-services**
 - NOTE : If running services via `python xxx` or `node xxx` commands, .env file must be set up (example in .env.example or Dockerfile)
 
+## High level Backend Microservice System design
+![microservices backend design](https://user-images.githubusercontent.com/74220155/187069379-d5922ceb-63bf-4c41-93a7-390221cafa1b.jpg)
+
+
 ## TODO list:
 TODO list, to complete this project (probably)
 - [ ] Finish Backend Microservices
