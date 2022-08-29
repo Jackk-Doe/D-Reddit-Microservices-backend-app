@@ -58,6 +58,18 @@ services:
     volumes:
       - ./user-services:/app
 
+  # Content-Recommend-services
+  content-recommend-app:
+    container_name: content-recommend-services-app
+    build:
+      context: ./content-recommend-services
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    # For Development use only
+    volumes:
+      - ./content-recommend-services:/app
+
   # API Gateway
   api-gateway:
     build:
@@ -68,6 +80,7 @@ services:
     depends_on:
       - post-app
       - user-app
+      - content-recommend-app
     volumes:
       - ./client-API-gateway:/app
 
