@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 
+import load_env as _envs
+
 app = FastAPI()
 
 @app.get('/test')
@@ -9,4 +11,6 @@ async def testRoute():
 
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run("main:app", port=8080, host='0.0.0.0', reload=True)
+
+    PORT = int(_envs.PORT)
+    uvicorn.run("main:app", port=PORT, host='0.0.0.0', reload=True)
