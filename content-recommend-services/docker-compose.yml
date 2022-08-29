@@ -9,4 +9,4 @@ services:
       - 8080:8080
     # For Development use only
     volumes:
-      - .:/app
+      - .:/usr/src/app

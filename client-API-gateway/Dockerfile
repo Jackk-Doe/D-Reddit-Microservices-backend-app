@@ -1,6 +1,12 @@
-FROM python:3.9
+FROM python:3.9-slim
 
-WORKDIR /app
+WORKDIR /usr/src/app
+
+# install system dependencies
+RUN apt-get update \
+    && apt-get install gcc -y \
+    && apt-get clean
+
 COPY ./requirements.txt .
 RUN pip install --no-cache-dir  -r requirements.txt
 COPY . .
