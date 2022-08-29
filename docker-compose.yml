@@ -41,7 +41,7 @@ services:
         condition: service_started #Only started after postgres had started
     # For Development use only
     volumes:
-      - ./post-services:/app
+      - ./post-services:/usr/src/app
 
   # User-services
   user-app:
@@ -68,7 +68,7 @@ services:
       - 8080:8080
     # For Development use only
     volumes:
-      - ./content-recommend-services:/app
+      - ./content-recommend-services:/usr/src/app
 
   # API Gateway
   api-gateway:
@@ -82,7 +82,7 @@ services:
       - user-app
       - content-recommend-app
     volumes:
-      - ./client-API-gateway:/app
+      - ./client-API-gateway:/usr/src/app
 
 volumes:
   mongodb-data:
