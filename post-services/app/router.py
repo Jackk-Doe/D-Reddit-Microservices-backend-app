@@ -7,6 +7,10 @@ import api_user_services as _api_users
 import schemas as _schemas
 import services as _services
 
+# TODO : Update User's interested topics in CREATE & GETONE routes, and send to User-services
+# TODO : route to return recommending Room list
+# TODO : connect with Content-recommend-services
+
 
 router = APIRouter()
 

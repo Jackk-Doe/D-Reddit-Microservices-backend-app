@@ -12,6 +12,9 @@ router.get('/:id', UserController.getUser);
 /// Post-services mostly uses only these route(s)
 router.post('/token', UserController.validateUserToken);
 
+// TODO : a route to update (+) [views] in models.js
+// TODO : a route to return User [views] 
+
 /// For API-Gateway uses
 router.post('/signup', UserController.signUp);
 router.post('/signin', UserController.signIn);

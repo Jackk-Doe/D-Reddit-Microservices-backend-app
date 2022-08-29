@@ -21,6 +21,7 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     }
+    // TODO : Add [views] dict field
 });
 
 const UserModel = mongoose.model('user', UserSchema);
