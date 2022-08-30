@@ -42,6 +42,7 @@ services:
     # For Development use only
     volumes:
       - ./post-services:/usr/src/app
+    restart: on-failure:10  # Restart when failed, repeating 10 times
 
   # User-services
   user-app:
