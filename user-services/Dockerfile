@@ -1,7 +1,13 @@
 ## Thrid ver
-FROM node:16
+FROM node:16-slim
 #From now on the './' dir is pointed to './app'
 WORKDIR /app
+
+# install system dependencies
+RUN apt-get update \
+    && apt-get install gcc -y \
+    && apt-get clean
+
 COPY ./package*.json .
 RUN npm install
 COPY . .
