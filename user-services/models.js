@@ -20,8 +20,12 @@ const UserSchema = mongoose.Schema({
     bio: {
         type: String,
         required: true
-    }
+    },
     // TODO : Add [views] dict field
+    views: {
+        type: Map,
+        default: {}
+    }
 });
 
 const UserModel = mongoose.model('user', UserSchema);
