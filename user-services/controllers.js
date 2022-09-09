@@ -45,11 +45,7 @@ class UserController {
       // Get TOKEN
       const token = req.headers.authorization.split(" ")[1];
 
-      /// Decode ID from the token
-      /// [decodedDatas] contains [email], [id] & [iat] fields
-      const decodedDatas = jwt.decode(token, process.env.SECRET_KEY);
-
-      const _user_id = decodedDatas?.id;
+      const { id: _user_id } = await TokenAuthServices.decodeToken(token);
 
       const existedUser = await UserModel.findById(_user_id);
       if (!existedUser) {
