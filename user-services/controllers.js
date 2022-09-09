@@ -59,7 +59,7 @@ class UserController {
     }
   }
 
-  /// PATCH [ /views/:id ]
+  /// PATCH [ /views ]
   static async updateView(req, res) {
     try {
       // Generate [_user_id], from given token
@@ -71,24 +71,30 @@ class UserController {
         return res.status(404).json({ detail: "User not found" });
       }
 
-      const _topic_id = req.params.id;
+      // Get a List[int] of topics ID in body
+      const { topics_id } = req.body;
 
-      // If no [_topic_id] in User's [views],  set views[_topic_id] to 0
-      let _current_view = existedUser.views.get(_topic_id);
-      if (!_current_view) {
-        _current_view = 0;
-      }
+      topics_id.forEach((_topic_id) => {
+        const _topic_id_str = _topic_id.toString();
+        
+        // If no [_topic_id] in User's [views],  set views[_topic_id] to 0
+        let _current_view = existedUser.views.get(_topic_id_str);
+        if (!_current_view) {
+          _current_view = 0;
+        }
 
-      // Update views count
-      const _update_view_count = _current_view + 1;
-      existedUser.views.set(_topic_id, _update_view_count);
+        // Update views count
+        const _update_view_count = _current_view + 1;
+        existedUser.views.set(_topic_id_str, _update_view_count);
+      });
       
       const updatedUser = await UserModel.findByIdAndUpdate(_user_id, existedUser, { new: true });
 
       res.status(200).json({ user: updatedUser });
 
     } catch (error) {
-      res.status(500).json({ detail: "Update VIEW failed", error: error})
+      console.log(error);
+      res.status(500).json({ detail: "Update VIEW failed", error})
     }
   }
 

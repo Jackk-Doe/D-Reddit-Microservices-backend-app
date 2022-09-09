@@ -11,7 +11,7 @@ router.get('/:id', UserController.getUser);
 
 /// Post-services mostly uses only these route(s)
 router.post('/token', UserController.validateUserToken);
-router.patch('/views/:id', UserController.updateView);
+router.patch('/views', UserController.updateView);
 
 // TODO : a route to return User [views] 
 
