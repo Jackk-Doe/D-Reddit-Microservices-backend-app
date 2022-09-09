@@ -21,7 +21,6 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    // TODO : Add [views] dict field
     views: {
         type: Map,
         default: {}
