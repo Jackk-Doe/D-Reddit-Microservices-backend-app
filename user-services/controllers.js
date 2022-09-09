@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const UserModel = require("./models");
+const TokenAuthServices = require("./tokenAuthServices");
 
 class UserController {
 
@@ -59,6 +60,39 @@ class UserController {
       res.status(200).json({ user_id: _user_id });
     } catch (error) {
       res.status(500).json({ detail: "Error, problem with token decoding", error})
+    }
+  }
+
+  /// PATCH [ /views/:id ]
+  static async updateView(req, res) {
+    try {
+      // Generate [_user_id], from given token
+      const token = req.headers.authorization.split(" ")[1];
+      const { id: _user_id } = await TokenAuthServices.decodeToken(token);
+
+      const existedUser = await UserModel.findById(_user_id);
+      if (!existedUser) {
+        return res.status(404).json({ detail: "User not found" });
+      }
+
+      const _topic_id = req.params.id;
+
+      // If no [_topic_id] in User's [views],  set views[_topic_id] to 0
+      let _current_view = existedUser.views.get(_topic_id);
+      if (!_current_view) {
+        _current_view = 0;
+      }
+
+      // Update views count
+      const _update_view_count = _current_view + 1;
+      existedUser.views.set(_topic_id, _update_view_count);
+      
+      const updatedUser = await UserModel.findByIdAndUpdate(_user_id, existedUser, { new: true });
+
+      res.status(200).json({ user: updatedUser });
+
+    } catch (error) {
+      res.status(500).json({ detail: "Update VIEW failed", error: error})
     }
   }
 
