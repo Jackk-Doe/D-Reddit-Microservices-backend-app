@@ -35,6 +35,8 @@ async def getRooms(db: Session = Depends(get_db)):
 @router.get('/rooms/{room_id}')
 async def getRoomByID(*, room_id: str, db: Session = Depends(get_db), background_tasks: BackgroundTasks, request: Request):
     _room = await _services.get_room_by_id(id=room_id, db=db)
+    # If the [request] contains token, run a background task to send request to User-services,
+    # to update User.views (User's interested), by the topics_id of this [_room]
     background_tasks.add_task(_api_users.update_views_via_user_token, request, _room.topics_id)
     return _room
 

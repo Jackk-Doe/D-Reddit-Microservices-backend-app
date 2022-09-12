@@ -32,6 +32,7 @@ async def update_views_via_user_token(request: Request, topics_id: list[int]):
     '''
     BACKGROUND TASK : Update Users.[views] in User-services via user TOKEN,  called by getRoomByID()
     '''
+    # TODO : Refactor codes here
     try:
         _bearer_and_token = request.headers['authorization']
         _headers = {'Authorization': _bearer_and_token}
