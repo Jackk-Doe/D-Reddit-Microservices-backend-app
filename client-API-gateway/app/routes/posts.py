@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends, Body
+from fastapi import APIRouter, HTTPException, Depends, Body, Request
 from fastapi.security import OAuth2PasswordBearer
 import httpx
 
@@ -37,9 +37,15 @@ async def getRooms():
 
 
 @router.get('/rooms/{room_id}')
-async def getById(room_id: int):
+async def getById(room_id: int, request: Request):
     try:
-        res = httpx.get(f"{_envs.POST_SERVICES_URL}/posts/rooms/{room_id}")
+        _bearer_and_token = request.headers.get('authorization')
+        if _bearer_and_token is not None:
+            _headers = {'Authorization': _bearer_and_token}
+            res = httpx.get(f"{_envs.POST_SERVICES_URL}/posts/rooms/{room_id}", headers=_headers)
+        else:
+            res = httpx.get(f"{_envs.POST_SERVICES_URL}/posts/rooms/{room_id}")
+            
         _res = res.json()
         if res.status_code != 200:
             return {'status_code': res.status_code, 'detail': _res['detail']}
