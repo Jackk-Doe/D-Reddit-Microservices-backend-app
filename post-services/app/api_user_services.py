@@ -1,4 +1,4 @@
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException, Depends, Request
 from fastapi.security import OAuth2PasswordBearer
 import httpx
 
@@ -26,3 +26,16 @@ async def validate_token(token: str = Depends(_oauth2schema)):
         raise HTTPException(status_code=res.status_code, detail=_error_detail)
 
     return _res_datas['user_id']
+
+
+async def update_views_via_user_token(request: Request, topics_id: list[int]):
+    '''
+    BACKGROUND TASK : Update Users.[views] in User-services via user TOKEN,  called by getRoomByID()
+    '''
+    try:
+        _bearer_and_token = request.headers['authorization']
+        _headers = {'Authorization': _bearer_and_token}
+        httpx.patch(f"{_envs.USER_SERVICES_URL}/views", headers=_headers, json={ 'topics_id' : topics_id })
+    except:
+        print("No TOKEN passed, No update User.services [views]")
+        pass
