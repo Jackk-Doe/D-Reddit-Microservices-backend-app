@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Request
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -33,8 +33,10 @@ async def getRooms(db: Session = Depends(get_db)):
     return await _services.get_rooms(db=db)
 
 @router.get('/rooms/{room_id}')
-async def getRoomByID(room_id: str, db: Session = Depends(get_db)):
-    return await _services.get_room_by_id(id=room_id, db=db)
+async def getRoomByID(*, room_id: str, db: Session = Depends(get_db), background_tasks: BackgroundTasks, request: Request):
+    _room = await _services.get_room_by_id(id=room_id, db=db)
+    background_tasks.add_task(_api_users.update_views_via_user_token, request, _room.topics_id)
+    return _room
 
 @router.post('/rooms')
 async def createRoom(room: _schemas.RoomCreate, db: Session = Depends(get_db), user_id = Depends(_api_users.validate_token)):
