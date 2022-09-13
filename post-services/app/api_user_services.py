@@ -32,11 +32,11 @@ async def update_views_via_user_token(request: Request, topics_id: list[int]):
     '''
     BACKGROUND TASK : Update Users.[views] in User-services via user TOKEN,  called by getRoomByID()
     '''
-    # TODO : Refactor codes here
-    try:
-        _bearer_and_token = request.headers['authorization']
-        _headers = {'Authorization': _bearer_and_token}
-        httpx.patch(f"{_envs.USER_SERVICES_URL}/views", headers=_headers, json={ 'topics_id' : topics_id })
-    except:
-        print("No TOKEN passed, No update User.services [views]")
-        pass
+    _bearer_and_token = request.headers.get('authorization')
+    if _bearer_and_token is not None:
+        try:
+            _headers = {'Authorization': _bearer_and_token}
+            httpx.patch(f"{_envs.USER_SERVICES_URL}/views", headers=_headers, json={ 'topics_id' : topics_id })
+        except:
+            print("No TOKEN passed, No update User.services [views]")
+            pass
