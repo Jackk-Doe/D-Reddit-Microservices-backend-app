@@ -36,7 +36,8 @@ async def update_views_via_user_token(request: Request, topics_id: list[int]):
     if _bearer_and_token is not None:
         try:
             _headers = {'Authorization': _bearer_and_token}
-            httpx.patch(f"{_envs.USER_SERVICES_URL}/views", headers=_headers, json={ 'topics_id' : topics_id })
-        except:
-            print("No TOKEN passed, No update User.services [views]")
+            # / Hacky way : set [timeout] to 0.0xx01 to wait a response from the other server
+            # /             in a VERY SHORT amount of time.
+            httpx.patch(f"{_envs.USER_SERVICES_URL}/views", timeout=0.000000001, headers=_headers, json={ 'topics_id' : topics_id })
+        except httpx.TimeoutException:
             pass
