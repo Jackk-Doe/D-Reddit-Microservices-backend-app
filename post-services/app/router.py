@@ -40,6 +40,7 @@ async def getRoomByID(*, room_id: str, db: Session = Depends(get_db), background
     background_tasks.add_task(_api_users.update_views_via_user_token, request, _room.topics_id)
     return _room
 
+# TODO : update Users.views
 @router.post('/rooms')
 async def createRoom(room: _schemas.RoomCreate, db: Session = Depends(get_db), user_id = Depends(_api_users.validate_token)):
     try:
@@ -47,6 +48,7 @@ async def createRoom(room: _schemas.RoomCreate, db: Session = Depends(get_db), u
     except Exception as error:
         return HTTPException(status_code=500, detail=str(error))
 
+# TODO : update Users.views
 @router.patch('/rooms/{room_id}')
 async def updateRoom(room_id: str, update_room: _schemas.RoomUpdate, db: Session = Depends(get_db), user_id = Depends(_api_users.validate_token)):
     try:
