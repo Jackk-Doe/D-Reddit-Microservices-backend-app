@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const UserModel = require("./models");
 const TokenAuthServices = require("./tokenAuthServices");
+const Utils = require("./utils");
 
 class UserController {
 
@@ -62,17 +63,21 @@ class UserController {
   /// PATCH [ /views ]
   static async updateView(req, res) {
     try {
-      // Generate [_user_id], from given token
-      const token = req.headers.authorization.split(" ")[1];
-      const decodedDatas = await TokenAuthServices.decodeToken(token);
 
-      if (!decodedDatas) {
-        return res.status(404).json({ detail: "Invalid token" });
-      }
+      // TODO : Test check_id_from_token_or_param_body in utils.js
+      const id = await Utils.check_id_from_token_or_param_body(req);
 
-      const { id: _user_id } = decodedDatas;
+      // // Generate [_user_id], from given token
+      // const token = req.headers.authorization.split(" ")[1];
+      // const decodedDatas = await TokenAuthServices.decodeToken(token);
 
-      const existedUser = await UserModel.findById(_user_id);
+      // if (!decodedDatas) {
+      //   return res.status(404).json({ detail: "Invalid token" });
+      // }
+
+      // const { id: _user_id } = decodedDatas;
+
+      const existedUser = await UserModel.findById(id);
       if (!existedUser) {
         return res.status(404).json({ detail: "User not found" });
       }
@@ -94,7 +99,7 @@ class UserController {
         existedUser.views.set(_topic_id_str, _update_view_count);
       });
       
-      const updatedUser = await UserModel.findByIdAndUpdate(_user_id, existedUser, { new: true });
+      const updatedUser = await UserModel.findByIdAndUpdate(id, existedUser, { new: true });
 
       res.status(200).json({ user: updatedUser });
 
