@@ -18,6 +18,7 @@ class Utils {
 
         /// Via UserID : update User.views
         if (req.body.id) {
+            console.log("FOUND UserID, in Request Body");
             const { id } = req.body;
             return id;
         }
