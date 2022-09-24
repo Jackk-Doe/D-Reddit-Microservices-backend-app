@@ -42,6 +42,22 @@ class UserController {
     }
   }
 
+  /// GET [ /users/views ]
+  static async getUserViews(req, res) {
+    try {
+      // Get TOKEN
+      const token = req.headers.authorization.split(" ")[1];
+      const { id } = await TokenAuthServices.decodeToken(token);
+      const existedUser = await UserModel.findById(id);
+      if (!existedUser) {
+        return res.status(404).json({ detail: "User not found" });
+      }
+      res.status(200).json({ views: existedUser.views });
+    } catch (error) {
+      res.status(500).json({ detail: "Error, problem from User-Service : ", error: error.toString()})
+    }
+  }
+
   /// POST [ /users/token ]
   static async validateUserToken(req, res) {
     try {
