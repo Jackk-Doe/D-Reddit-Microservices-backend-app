@@ -9,7 +9,7 @@ _oauth2schema = OAuth2PasswordBearer(tokenUrl="token")
 
 async def validate_token(token: str = Depends(_oauth2schema)):
     '''
-    Running in Depends : Validate User account with a given [token] through User-services, then return [user_id]
+    Use in Depends : Validate User account with a given [token] through User-services, then return [user_id]
     '''
     try:
         _headers = {'Authorization': 'Bearer ' + token}
@@ -50,6 +50,7 @@ async def get_user_views_via_user_token(req: Request):
         _error_detail = _res_datas['detail']
         raise HTTPException(status_code=res.status_code, detail=_error_detail)
 
+    # Return in dict type
     return _res_datas['views']
 
 
