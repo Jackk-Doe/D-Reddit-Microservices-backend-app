@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy.dialects.postgresql import array
 from fastapi import HTTPException
 from datetime import datetime
 
@@ -14,6 +15,18 @@ Room Routes
 
 async def get_rooms(db: Session):
     return [_schemas.Room.from_orm(_rooms) for _rooms in db.query(_models.Room).all()]
+
+
+async def get_recommend_rooms(recommend_topics: dict[int,int],db: Session):
+    _recommend_rooms = []
+
+    for _topic_id, _count in recommend_topics.items():
+        _rooms = db.query(_models.Room).filter(_models.Room.topics_id.any_() == _topic_id).limit(_count).all()
+
+        # NOTE : flatten [_rooms] before adding into list
+        [_recommend_rooms.append(_room) for _room in _rooms if _room not in _recommend_rooms]
+
+    return [_schemas.Room.from_orm(_room) for _room in _recommend_rooms]
 
 
 async def get_room_by_id(id: int, db: Session):
