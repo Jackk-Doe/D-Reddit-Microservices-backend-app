@@ -55,9 +55,13 @@ async def createRoom(*, room: _schemas.RoomCreate, db: Session = Depends(get_db)
 
 # TODO : update Users.views
 @router.patch('/rooms/{room_id}')
-async def updateRoom(room_id: str, update_room: _schemas.RoomUpdate, db: Session = Depends(get_db), user_id = Depends(_api_users.validate_token)):
+async def updateRoom(*, room_id: str, update_room: _schemas.RoomUpdate, db: Session = Depends(get_db), user_id = Depends(_api_users.validate_token), background_tasks: BackgroundTasks):
     try:
-        return await _services.update_room(room_id=room_id, user_id=user_id, update_room=update_room, db=db)
+        _room, _new_topics_id = await _services.update_room(room_id=room_id, user_id=user_id, update_room=update_room, db=db)
+        if _new_topics_id:
+            # NOTE : Only update if [_new_topics_id] is not empty
+            background_tasks.add_task(_api_users.update_views_via_user_id, user_id, _new_topics_id)
+        return _room
     except HTTPException as _http_error:
         return HTTPException(status_code=_http_error.status_code, detail=_http_error.detail)
     except Exception as error:
