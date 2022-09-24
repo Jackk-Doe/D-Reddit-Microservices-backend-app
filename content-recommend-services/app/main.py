@@ -18,15 +18,22 @@ async def testRoute():
 async def getRoomRecommend(datas: UserInterest):
     '''
     This function is : f(a) = b 
-    where [a] is Dict of [topic_ID : a list[int], of User interested topics ID]
-    and [b] is Dict of [topic_ID : a list[int], recommending topics ID for the User ]
+    where [a] is Dict[int,int] of : User interested topics ID]
+    and [b] is Dict[int,int] of   : Recommending topics ID for the User ]
     '''
-    _datas = datas.views
-    _sum = sum(_datas.values())
-    for k, v in _datas.items():
-        _datas[k] = round((v/_sum) * 10)
+
+    _views = datas.views
+    _total_views = sum(_views.values())
+
+    _recommend_topics = {}
+
+    for _topic_id, _view_count in _views.items():
+        _recomm_num = round((_view_count/_total_views) * 10)
+        if _recomm_num != 0:
+            _recommend_topics[_topic_id] = _recomm_num
+
     # NOTE : approximately return 10 recommending topics ID
-    return _datas
+    return _recommend_topics
 
 
 if __name__ == '__main__':
