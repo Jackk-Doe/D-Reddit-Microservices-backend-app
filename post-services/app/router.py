@@ -7,9 +7,6 @@ import api_user_services as _api_users
 import schemas as _schemas
 import services as _services
 
-# TODO : Update User's interested topics in CREATE, UPDATE & GETONE routes, and send to User-services
-# TODO : Put them in BACKGROUND task
-
 # TODO : route to return recommending Room list
 # TODO : connect with Content-recommend-services
 
@@ -53,7 +50,6 @@ async def createRoom(*, room: _schemas.RoomCreate, db: Session = Depends(get_db)
     except Exception as error:
         return HTTPException(status_code=500, detail=str(error))
 
-# TODO : update Users.views
 @router.patch('/rooms/{room_id}')
 async def updateRoom(*, room_id: str, update_room: _schemas.RoomUpdate, db: Session = Depends(get_db), user_id = Depends(_api_users.validate_token), background_tasks: BackgroundTasks):
     try:
@@ -100,7 +96,7 @@ async def getMessages(db: Session = Depends(get_db)):
 
 @router.delete('/messages/{message_id}')
 async def deleteMessage(message_id: int, db: Session = Depends(get_db)):
-    # TODO LATER : Make call to UserServices
+    # TODO LATER (Maybe) : Make call to UserServices
     await _services.delete_message(message_id=message_id, db=db)
     return {"status_code": 200}
 
