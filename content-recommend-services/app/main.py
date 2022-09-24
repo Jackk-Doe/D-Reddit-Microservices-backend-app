@@ -33,7 +33,7 @@ async def getRoomRecommend(datas: UserInterest):
             _recommend_topics[_topic_id] = _recomm_num
 
     # NOTE : approximately return 10 recommending topics ID
-    return _recommend_topics
+    return { 'views': _recommend_topics }
 
 
 if __name__ == '__main__':
