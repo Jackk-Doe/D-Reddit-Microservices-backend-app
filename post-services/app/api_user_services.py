@@ -41,3 +41,13 @@ async def update_views_via_user_token(request: Request, topics_id: list[int]):
             httpx.patch(f"{_envs.USER_SERVICES_URL}/views", timeout=0.000000001, headers=_headers, json={ 'topics_id' : topics_id })
         except httpx.TimeoutException:
             pass
+
+
+async def update_views_via_user_id(user_id: str, topics_id: list[int]):
+    '''
+    BACKGROUND TASK : Update Users.[views] in User-services via UserID,  called by createRoom() & updateRoom()
+    '''
+    try:
+        httpx.patch(f"{_envs.USER_SERVICES_URL}/views", timeout=0.000000001, json={ 'id': user_id, 'topics_id' : topics_id })
+    except httpx.TimeoutException:
+        pass
