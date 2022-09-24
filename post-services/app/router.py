@@ -26,7 +26,15 @@ def get_db():
 Room Routes 
 '''
 @router.get('/rooms', response_model=List[_schemas.Room])
-async def getRooms(db: Session = Depends(get_db)):
+async def getRooms(*, recommend: bool = False ,db: Session = Depends(get_db), request: Request):
+    if recommend:
+        _user_views = await _api_users.get_user_views_via_user_token(req=request)
+        print("User views datas: ", _user_views)
+        print("Generate Recommend Topic")
+        # TODO : Generate Recommending topics ID
+        # TODO : Send [_user_views] to Content-Recommend-Services
+        # TODO : Send Recommend Rooms datas to client
+
     return await _services.get_rooms(db=db)
 
 @router.get('/rooms/{room_id}')
