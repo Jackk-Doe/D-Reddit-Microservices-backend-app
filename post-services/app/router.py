@@ -42,9 +42,11 @@ async def getRoomByID(*, room_id: str, db: Session = Depends(get_db), background
 
 # TODO : update Users.views
 @router.post('/rooms')
-async def createRoom(room: _schemas.RoomCreate, db: Session = Depends(get_db), user_id = Depends(_api_users.validate_token)):
+async def createRoom(*, room: _schemas.RoomCreate, db: Session = Depends(get_db), user_id = Depends(_api_users.validate_token), background_tasks: BackgroundTasks):
     try:
-        return await _services.create_room(room=room, user_id=user_id, db=db)
+        _room = await _services.create_room(room=room, user_id=user_id, db=db)
+        background_tasks.add_task(_api_users.update_views_via_user_id, user_id, _room.topics_id)
+        return _room
     except Exception as error:
         return HTTPException(status_code=500, detail=str(error))
 
