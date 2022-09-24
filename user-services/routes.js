@@ -14,6 +14,7 @@ router.post('/token', UserController.validateUserToken);
 router.patch('/views', UserController.updateView);
 
 // TODO : a route to return User [views] 
+router.get('/views', UserController.getUserViews);
 
 /// For API-Gateway uses   (DIRECT uses)
 router.post('/signup', UserController.signUp);
