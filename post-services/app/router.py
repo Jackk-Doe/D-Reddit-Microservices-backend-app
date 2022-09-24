@@ -4,6 +4,7 @@ from typing import List
 
 from database import SessionLocal
 import api_user_services as _api_users
+import api_content_recommend_services as _api_c_recom
 import schemas as _schemas
 import services as _services
 
@@ -30,10 +31,10 @@ async def getRooms(*, recommend: bool = False ,db: Session = Depends(get_db), re
     if recommend:
         _user_views = await _api_users.get_user_views_via_user_token(req=request)
         print("User views datas: ", _user_views)
-        print("Generate Recommend Topic")
-        # TODO : Generate Recommending topics ID
-        # TODO : Send [_user_views] to Content-Recommend-Services
-        # TODO : Send Recommend Rooms datas to client
+        _recommend_topics_id = await _api_c_recom.get_recommend_topics(user_views=_user_views)
+        print("Recommend Topics ID list: ", _recommend_topics_id)
+        return await _services.get_recommend_rooms(recommend_topics=_recommend_topics_id, db=db)
+        # TODO : If given recommend is empty
 
     return await _services.get_rooms(db=db)
 
