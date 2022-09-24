@@ -58,7 +58,7 @@ class UserController {
 
       res.status(200).json({ user_id: _user_id });
     } catch (error) {
-      res.status(500).json({ detail: "Error, problem with token decoding", error})
+      res.status(500).json({ detail: "Error, problem from User-Service : ", error})
     }
   }
 
