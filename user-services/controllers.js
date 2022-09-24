@@ -7,6 +7,7 @@ const Utils = require("./utils");
 
 class UserController {
 
+  /// GET [ /users/account ]
   static async getAll(req, res) {
     try {
       const users = await UserModel.find();
@@ -16,6 +17,7 @@ class UserController {
     }
   }
 
+  /// GET [ /users/account/:userID ]
   static async getUser(req, res) {
     try {
       // If a given [id] field is not in 24 hex character, it throws error (mongoose)
