@@ -62,7 +62,7 @@ class UserController {
     }
   }
 
-  /// PATCH [ /views ]
+  /// PATCH [ /users/views ]
   static async updateView(req, res) {
     try {
 
