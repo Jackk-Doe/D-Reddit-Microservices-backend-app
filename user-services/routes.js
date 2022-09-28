@@ -10,11 +10,9 @@ router.get('/account', UserController.getAll);
 router.get('/account/:id', UserController.getUser);
 
 /// Post-services mostly uses only these route(s)
-router.post('/token', UserController.validateUserToken);
-router.patch('/views', UserController.updateView);
-
-// TODO : a route to return User [views] 
 router.get('/views', UserController.getUserViews);
+router.patch('/views', UserController.updateView);
+router.post('/token', UserController.validateUserToken);
 
 /// For API-Gateway uses   (DIRECT uses)
 router.post('/signup', UserController.signUp);
