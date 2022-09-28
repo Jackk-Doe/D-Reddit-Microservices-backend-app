@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy.dialects.postgresql import array
 from fastapi import HTTPException
 from datetime import datetime
 
@@ -14,6 +15,18 @@ Room Routes
 
 async def get_rooms(db: Session):
     return [_schemas.Room.from_orm(_rooms) for _rooms in db.query(_models.Room).all()]
+
+
+async def get_recommend_rooms(recommend_topics: dict[int,int],db: Session):
+    _recommend_rooms = []
+
+    for _topic_id, _count in recommend_topics.items():
+        _rooms = db.query(_models.Room).filter(_models.Room.topics_id.any_() == _topic_id).limit(_count).all()
+
+        # NOTE : flatten [_rooms] before adding into list
+        [_recommend_rooms.append(_room) for _room in _rooms if _room not in _recommend_rooms]
+
+    return [_schemas.Room.from_orm(_room) for _room in _recommend_rooms]
 
 
 async def get_room_by_id(id: int, db: Session):
@@ -51,7 +64,7 @@ async def create_room(room: _schemas.RoomCreate, user_id: str, db: Session):
 
 
 async def update_room(room_id: int, user_id: str, update_room: _schemas.RoomUpdate, db: Session):
-    _current_room = db.query(_models.Room).get(room_id)
+    _current_room: _models.Room = db.query(_models.Room).get(room_id)
     if not _current_room:
         #! Error : Room not found
         raise HTTPException(status_code=404, detail="The given room id not found")
@@ -66,12 +79,16 @@ async def update_room(room_id: int, user_id: str, update_room: _schemas.RoomUpda
 
     # Create dict
     _update_room_data = update_room.dict(exclude_unset=True)
-    # Remove [topics] which is List[str] from dict
+    # Remove [topics], which is List[str] from dict
     del _update_room_data['topics']
 
     # Add necessary fields, to do update
     _update_room_data['topics_id'] = topics_id
     _update_room_data['updated'] = datetime.utcnow()
+
+    # NOTE : Get new topics ID from the update datas
+    #        To use in User.views updating
+    _new_topics_id = [_new_topic for _new_topic in topics_id if _new_topic not in _current_room.topics_id]
 
     #/ Update fields that are different from the current data of [_current_room]
     for key, value in _update_room_data.items():
@@ -80,7 +97,7 @@ async def update_room(room_id: int, user_id: str, update_room: _schemas.RoomUpda
     db.add(_current_room)
     db.commit()
     db.refresh(_current_room)
-    return _schemas.Room.from_orm(_current_room)
+    return _schemas.Room.from_orm(_current_room), _new_topics_id
 
 
 async def delete_room(id: int, user_id: str, db: Session):
