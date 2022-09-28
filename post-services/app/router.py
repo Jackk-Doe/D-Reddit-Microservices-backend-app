@@ -8,9 +8,6 @@ import api_content_recommend_services as _api_c_recom
 import schemas as _schemas
 import services as _services
 
-# TODO : route to return recommending Room list
-# TODO : connect with Content-recommend-services
-
 
 router = APIRouter()
 
@@ -29,12 +26,12 @@ Room Routes
 @router.get('/rooms', response_model=List[_schemas.Room])
 async def getRooms(*, recommend: bool = False ,db: Session = Depends(get_db), request: Request):
     if recommend:
+        #/ Send system-recommend Rooms to user, base on User.views (interested)
         _user_views = await _api_users.get_user_views_via_user_token(req=request)
         print("User views datas: ", _user_views)
         _recommend_topics_id = await _api_c_recom.get_recommend_topics(user_views=_user_views)
         print("Recommend Topics ID list: ", _recommend_topics_id)
         return await _services.get_recommend_rooms(recommend_topics=_recommend_topics_id, db=db)
-        # TODO : If given recommend is empty
 
     return await _services.get_rooms(db=db)
 

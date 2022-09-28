@@ -31,7 +31,7 @@ class Room(Base):
 
     topics_id = Column(ARRAY(Integer, ForeignKey("topics.id")))
 
-    # TODO : [view] field (INT)
+    # TODO LATER (Maybe) : [view] field (INT)
 
     # topics_id = Column(Integer, ForeignKey("topics.id"))
 
