@@ -25,6 +25,9 @@ Also use this project for INFS605 Microservices assignment
   - Uses OAuth2 security protocol, Bearer token verification.
   - Only this service has access to USER database (MongoDB)
   - Handling users account related requests : SignUp, SignIn, Generate-Token, Verify-Token.
+- Content-Recommend-Services
+  - Generate recommend topics ID and amount (in dict[int,int])
+  - Recommending topics are based on User's history viewed topics (User.views)
   
 ## To Run App
 - NOTE : Suggest using Docker to create container and run the project.
@@ -58,7 +61,7 @@ TODO list, to complete this project (probably)
   - [ ] Admin APIGateway (Access to all routes)
   - [X] Post-services
   - [X] User-services
-  - [ ] Content-recommend-services
+  - [X] Content-recommend-services
   - [ ] Content-filter-services
   - [ ] Admin-services (ADMIN USE)
   - [X] POST database
