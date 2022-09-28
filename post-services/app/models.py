@@ -31,6 +31,8 @@ class Room(Base):
 
     topics_id = Column(ARRAY(Integer, ForeignKey("topics.id")))
 
+    # TODO LATER (Maybe) : [view] field (INT)
+
     # topics_id = Column(Integer, ForeignKey("topics.id"))
 
     # topics = relationship("Topic", foreign_key=[topics_id]) #O2M, Single-direction

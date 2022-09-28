@@ -41,7 +41,8 @@ services:
         condition: service_started #Only started after postgres had started
     # For Development use only
     volumes:
-      - ./post-services:/app
+      - ./post-services:/usr/src/app
+    restart: on-failure:10  # Restart when failed, repeating 10 times
 
   # User-services
   user-app:
@@ -58,6 +59,18 @@ services:
     volumes:
       - ./user-services:/app
 
+  # Content-Recommend-services
+  content-recommend-app:
+    container_name: content-recommend-services-app
+    build:
+      context: ./content-recommend-services
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    # For Development use only
+    volumes:
+      - ./content-recommend-services:/usr/src/app
+
   # API Gateway
   api-gateway:
     build:
@@ -68,8 +81,9 @@ services:
     depends_on:
       - post-app
       - user-app
+      - content-recommend-app
     volumes:
-      - ./client-API-gateway:/app
+      - ./client-API-gateway:/usr/src/app
 
 volumes:
   mongodb-data:

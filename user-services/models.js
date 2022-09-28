@@ -20,6 +20,10 @@ const UserSchema = mongoose.Schema({
     bio: {
         type: String,
         required: true
+    },
+    views: {
+        type: Map,
+        default: {}
     }
 });
 

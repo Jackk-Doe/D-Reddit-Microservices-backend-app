@@ -13,7 +13,7 @@ services:
 
     # For Development use only
     volumes:
-      - .:/app
+      - .:/usr/src/app
 
   postgres:
     container_name: post-services-db

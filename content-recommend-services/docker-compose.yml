@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  # Content-Recommend-services
+  content-recommend-app:
+    container_name: content-recommend-services-app
+    build: .
+    ports:
+      - 8080:8080
+    # For Development use only
+    volumes:
+      - .:/usr/src/app
