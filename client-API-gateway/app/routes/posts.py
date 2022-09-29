@@ -63,7 +63,7 @@ async def getById(room_id: int, token: str = Depends(token_auth_scheme)):
 
 
 @router.post('/rooms')
-async def createRoom(payload: dict = Body(), token: str = Depends(token_auth_scheme)):
+async def createRoom(payload: dict = Body(example={"room_name": "Room name", "body": "Room body (main text)", "topics": ["beginner", "python"]}), token: str = Depends(token_auth_scheme)):
     try:
         if token is None:
             return HTTPException(status_code=401, detail="Token is required")
@@ -79,7 +79,7 @@ async def createRoom(payload: dict = Body(), token: str = Depends(token_auth_sch
 
 
 @router.patch('/rooms/{room_id}')
-async def updateRoom(room_id: int, payload: dict = Body(), token: str = Depends(token_auth_scheme)):
+async def updateRoom(room_id: int, payload: dict = Body(example={"room_name": "New Room name", "body": "New Room body (main text)", "topics": ["beginner", "python"]}), token: str = Depends(token_auth_scheme)):
     try:
         if token is None:
             return HTTPException(status_code=401, detail="Token is required")
@@ -111,7 +111,7 @@ async def deleteRoom(room_id: int, token: str = Depends(token_auth_scheme)):
 
 
 @router.post('/rooms/{room_id}/add-message')
-async def addMessage(room_id: int, payload: dict = Body(), token: str = Depends(token_auth_scheme)):
+async def addMessage(room_id: int, payload: dict = Body(example={"body": "This is a comment message to add into this Room"}), token: str = Depends(token_auth_scheme)):
     try:
         if token is None:
             return HTTPException(status_code=401, detail="Token is required")
