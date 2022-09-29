@@ -6,6 +6,8 @@ import load_envs as _envs
 
 
 _oauth2schema = OAuth2PasswordBearer(tokenUrl="token")
+# NOTE : better be using HTTPBearer() obj instead
+# NOTE : LAZY to re-write the current codes, keeps it this way
 
 async def validate_token(token: str = Depends(_oauth2schema)):
     '''
