@@ -13,6 +13,9 @@ app.include_router(_user_router, prefix="/users")
 
 @app.get('/')
 async def home():
+    '''
+    Test a connection of this custom API Gateway app
+    '''
     return {"API Testing": "Hello FastAPI From API Gateway"}
 
 if __name__ == '__main__':
