@@ -20,7 +20,7 @@ async def testConnection():
 
 
 @router.post('/signup')
-async def signupUser(payload: dict = Body()):
+async def signupUser(payload: dict = Body(example={"name": "User name (e.g: Jackk Doe)", "email": "User email here", "password": "User password here", "bio": "About User bio"})):
     try:
         res = httpx.post(f"{_envs.USER_SERVICES_URL}/users/signup", json=payload)
         _res = res.json()
@@ -32,7 +32,7 @@ async def signupUser(payload: dict = Body()):
 
 
 @router.post('/signin')
-async def signinUser(payload: dict = Body()):
+async def signinUser(payload: dict = Body(example={"email": "User email here", "password": "User password here"})):
     try:
         res = httpx.post(f"{_envs.USER_SERVICES_URL}/users/signin", json=payload)
         _res = res.json()
