@@ -54,6 +54,7 @@ class Room(_RoomBase):
     id: int
     host_id: str
     topics_id: list[int]
+    topics: list[Topic]
     participants_id: list[str]
     messages: list[Message]
     updated: datetime

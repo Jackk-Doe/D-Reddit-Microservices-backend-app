@@ -45,7 +45,7 @@ class Room(Base):
 
     # topics_id = Column(Integer, ForeignKey("topics.id"))
 
-    # topics = relationship("Topic", foreign_key=[topics_id]) #O2M, Single-direction
+    topics = relationship("Topic", secondary=RoomToTopic_Table) #O2M, Single-direction
     messages = relationship("Message", order_by="Message.created", cascade="all, delete") #O2M, Bi-direction
 
 
