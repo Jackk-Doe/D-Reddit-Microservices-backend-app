@@ -36,27 +36,28 @@ async def get_room_by_id(id: int, db: Session):
     return _schemas.Room.from_orm(_room)
 
 
-async def _check_topics_exist(topic: str, db: Session) -> int:
+async def _create_or_return_one_topic(topic: str, db: Session) -> _models.Topic:
     '''
     Helper func : If existed return, else create new Topic in DB
     '''
     topic_search: _models.Topic = db.query(
         _models.Topic).filter_by(topic_name=topic).first()
     if topic_search:
-        return topic_search.id
+        return topic_search
     else:
         _topic = _models.Topic(topic_name=topic)
         db.add(_topic)
         db.commit()
         db.refresh(_topic)
-        return _topic.id
+        return _topic
 
 
 async def create_room(room: _schemas.RoomCreate, user_id: str, db: Session):
+    _topics = [await _create_or_return_one_topic(topic, db) for topic in room.topics]
     # Convert [room.topics] to List[int]
-    _topics_id = [await _check_topics_exist(topic, db) for topic in room.topics]
+    _topics_id = [_topic.id for _topic in _topics]
     _room = _models.Room(room_name=room.room_name,
-                         host_id=user_id, body=room.body, topics_id=_topics_id)
+                         host_id=user_id, body=room.body, topics_id=_topics_id, topics=_topics)
     db.add(_room)
     db.commit()
     db.refresh(_room)
@@ -75,7 +76,8 @@ async def update_room(room_id: int, user_id: str, update_room: _schemas.RoomUpda
             status_code=403, detail="The user does not own this room, to update")
 
     # Convert [room.topics] to List[int]
-    topics_id = [await _check_topics_exist(topic, db) for topic in update_room.topics]
+    topics = [await _create_or_return_one_topic(topic, db) for topic in update_room.topics]
+    topics_id = [_topic.id for _topic in topics]
 
     # Create dict
     _update_room_data = update_room.dict(exclude_unset=True)
@@ -83,6 +85,7 @@ async def update_room(room_id: int, user_id: str, update_room: _schemas.RoomUpda
     del _update_room_data['topics']
 
     # Add necessary fields, to do update
+    _update_room_data['topics'] = topics
     _update_room_data['topics_id'] = topics_id
     _update_room_data['updated'] = datetime.utcnow()
 
