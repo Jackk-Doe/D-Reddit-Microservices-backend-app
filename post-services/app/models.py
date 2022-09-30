@@ -1,11 +1,21 @@
 # NOTE : only the PostgreSQL backend has support for SQL arrays in SQLAlchemy.
 
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Table
 from sqlalchemy.types import ARRAY
 from sqlalchemy.orm import relationship
 import datetime
 
 from database import Base
+
+
+# Association Table : to connect Room & Topic
+# NOTE : to use with sqlalchemy relationship(), to created unary direction connection
+RoomToTopic_Table = Table(
+    "roomtotopic",
+    Base.metadata,
+    Column("topics_id", ForeignKey("topics.id")),
+    Column("rooms_id", ForeignKey("rooms.id")),
+)
 
 
 class Topic(Base):
